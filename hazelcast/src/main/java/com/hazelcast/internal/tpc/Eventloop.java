@@ -246,11 +246,19 @@ public abstract class Eventloop implements Executor {
     }
 
     /**
+<<<<<<< HEAD
      * Awaits for the termination of the Eventloop with the given timeout.
      *
      * @param timeout the timeout
      * @param unit    the TimeUnit
      * @return true if the Eventloop is terminated at the moment the timeout happened.
+=======
+     * Awaits for the termination of the Eventloop.
+     *
+     * @param timeout the timeout
+     * @param unit    the TimeUnit
+     * @return true if the Eventloop is terminated.
+>>>>>>> 0183219831 (TPC)
      * @throws InterruptedException
      */
     public final boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException {
@@ -259,7 +267,11 @@ public abstract class Eventloop implements Executor {
     }
 
     /**
+<<<<<<< HEAD
      * Wakes up the {@link Eventloop} when it is blocked and needs to be woken up.
+=======
+     * Wakes up the {@link Eventloop} when it is blocked an needs to be woken up.
+>>>>>>> 0183219831 (TPC)
      */
     protected abstract void wakeup();
 
