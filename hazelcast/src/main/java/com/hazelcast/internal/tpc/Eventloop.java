@@ -29,6 +29,8 @@ import org.jctools.queues.MpmcArrayQueue;
 import java.io.Closeable;
 import java.util.BitSet;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -42,7 +44,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 import java.util.function.Supplier;
-
+import java.util.function.Function;
 import static com.hazelcast.internal.nio.IOUtil.closeResources;
 import static com.hazelcast.internal.util.Preconditions.checkNotNull;
 import static com.hazelcast.internal.util.Preconditions.checkPositive;
@@ -246,19 +248,11 @@ public abstract class Eventloop implements Executor {
     }
 
     /**
-<<<<<<< HEAD
      * Awaits for the termination of the Eventloop with the given timeout.
      *
      * @param timeout the timeout
      * @param unit    the TimeUnit
-     * @return true if the Eventloop is terminated at the moment the timeout happened.
-=======
-     * Awaits for the termination of the Eventloop.
-     *
-     * @param timeout the timeout
-     * @param unit    the TimeUnit
      * @return true if the Eventloop is terminated.
->>>>>>> 0183219831 (TPC)
      * @throws InterruptedException
      */
     public final boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException {
@@ -267,11 +261,7 @@ public abstract class Eventloop implements Executor {
     }
 
     /**
-<<<<<<< HEAD
      * Wakes up the {@link Eventloop} when it is blocked and needs to be woken up.
-=======
-     * Wakes up the {@link Eventloop} when it is blocked an needs to be woken up.
->>>>>>> 0183219831 (TPC)
      */
     protected abstract void wakeup();
 
@@ -581,6 +571,14 @@ public abstract class Eventloop implements Executor {
             return Eventloop.this;
         }
 
+        public abstract AsyncFile newAsyncFile(String path);
+
+        public <E> Fut<E> newCompletedFuture(E value) {
+            Fut<E> fut = futAllocator.allocate();
+            fut.complete(value);
+            return fut;
+        }
+
         public <E> Fut<E> newFut() {
             return futAllocator.allocate();
         }
@@ -601,6 +599,57 @@ public abstract class Eventloop implements Executor {
             scheduledTask.fut = fut;
             scheduledTask.deadlineEpochNanos = epochNanos() + unit.toNanos(delay);
             scheduledTaskQueue.add(scheduledTask);
+            return fut;
+        }
+
+        public <I, O> Fut<List<O>> map(List<I> input, List<O> output, Function<I, O> function) {
+            Fut fut = newFut();
+
+            //todo: task can be pooled
+            Runnable task = new Runnable() {
+                Iterator<I> it = input.iterator();
+
+                @Override
+                public void run() {
+                    if (it.hasNext()) {
+                        I item = it.next();
+                        O result = function.apply(item);
+                        output.add(result);
+                    }
+
+                    if (it.hasNext()) {
+                        unsafe.offer(this);
+                    } else {
+                        fut.complete(output);
+                    }
+                }
+            };
+
+            execute(task);
+            return fut;
+        }
+
+        /**
+         * Keeps calling the loop function until it returns false.
+         *
+         * @param loopFunction the function that is called in a loop.
+         * @return the future that is completed as soon as the loop finishes.
+         */
+        public Fut loop(Function<Eventloop, Boolean> loopFunction) {
+            Fut fut = newFut();
+
+            //todo: task can be pooled
+            Runnable task = new Runnable() {
+                @Override
+                public void run() {
+                    if (loopFunction.apply(Eventloop.this)) {
+                        unsafe.offer(this);
+                    } else {
+                        fut.complete(null);
+                    }
+                }
+            };
+            execute(task);
             return fut;
         }
     }

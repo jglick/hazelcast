@@ -26,6 +26,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.datastore.ExternalDataStoreService;
 import com.hazelcast.datastore.impl.ExternalDataStoreServiceImpl;
 import com.hazelcast.instance.impl.Node;
+import com.hazelcast.internal.alto.AltoRuntime;
 import com.hazelcast.internal.cluster.ClusterService;
 import com.hazelcast.internal.diagnostics.Diagnostics;
 import com.hazelcast.internal.dynamicconfig.ClusterWideConfigurationService;
@@ -135,6 +136,7 @@ public class NodeEngineImpl implements NodeEngine {
     private final TenantControlServiceImpl tenantControlService;
     private final ExternalDataStoreService externalDataStoreService;
     private final TpcServerBootstrap tpcServerBootstrap;
+    private final AltoRuntime altoRuntime;
 
     @SuppressWarnings("checkstyle:executablestatementcount")
     public NodeEngineImpl(Node node) {
@@ -150,6 +152,12 @@ public class NodeEngineImpl implements NodeEngine {
             this.serviceManager = new ServiceManagerImpl(this);
             this.executionService = new ExecutionServiceImpl(this);
             this.tpcServerBootstrap = new TpcServerBootstrap(this);
+            if (System.getProperty("alto.enabled", "false").equals("true")) {
+                this.altoRuntime = new AltoRuntime(this);
+            } else {
+                this.altoRuntime = null;
+            }
+
             this.operationService = new OperationServiceImpl(this);
             this.eventService = new EventServiceImpl(this);
             this.operationParker = new OperationParkerImpl(this);
@@ -197,6 +205,10 @@ public class NodeEngineImpl implements NodeEngine {
 
     public TpcServerBootstrap getTpcServerBootstrap() {
         return tpcServerBootstrap;
+    }
+
+    public AltoRuntime getRequestService() {
+        return altoRuntime;
     }
 
     private void checkMapMergePolicies(Node node) {
@@ -265,6 +277,9 @@ public class NodeEngineImpl implements NodeEngine {
         splitBrainProtectionService.start();
         sqlService.start();
         tpcServerBootstrap.start();
+        if (altoRuntime != null) {
+            altoRuntime.start();
+        }
         diagnostics.start();
         node.getNodeExtension().registerPlugins(diagnostics);
     }
@@ -593,6 +608,9 @@ public class NodeEngineImpl implements NodeEngine {
         }
         if (tpcServerBootstrap != null) {
             tpcServerBootstrap.shutdown();
+        }
+        if (altoRuntime != null) {
+            altoRuntime.shutdown();
         }
     }
 
