@@ -115,16 +115,16 @@ public class AltoRuntime {
         this.nodeEngine = nodeEngine;
         this.logger = nodeEngine.getLogger(AltoRuntime.class);
         this.ss = (InternalSerializationService) nodeEngine.getSerializationService();
-        int responseThreadCount = Integer.parseInt(System.getProperty("reactor.responsethread.count", "1"));
-        boolean responseThreadSpin = Boolean.parseBoolean(System.getProperty("reactor.responsethread.spin", "false"));
-        this.writeThrough = Boolean.parseBoolean(java.lang.System.getProperty("reactor.write-through", "false"));
-        this.regularSchedule = Boolean.parseBoolean(java.lang.System.getProperty("reactor.regular-schedule", "true"));
-        this.poolRequests = Boolean.parseBoolean(java.lang.System.getProperty("reactor.pool-requests", "true"));
-        boolean poolLocalResponses = Boolean.parseBoolean(System.getProperty("reactor.pool-local-responses", "true"));
-        this.poolRemoteResponses = Boolean.parseBoolean(java.lang.System.getProperty("reactor.pool-remote-responses", "false"));
-        this.concurrentRequestLimit = Integer.parseInt(java.lang.System.getProperty("reactor.concurrent-request-limit", "-1"));
-        this.requestTimeoutMs = Integer.parseInt(java.lang.System.getProperty("reactor.request.timeoutMs", "23000"));
-        this.socketCount = Integer.parseInt(java.lang.System.getProperty("reactor.channels", "" + Runtime.getRuntime().availableProcessors()));
+        int responseThreadCount = Integer.parseInt(System.getProperty("hazelcast.alto.responsethread.count", "1"));
+        boolean responseThreadSpin = Boolean.parseBoolean(System.getProperty("hazelcast.alto.responsethread.spin", "false"));
+        this.writeThrough = Boolean.parseBoolean(java.lang.System.getProperty("hazelcast.tpc.write-through", "false"));
+        this.regularSchedule = Boolean.parseBoolean(java.lang.System.getProperty("hazelcast.tpc.regular-schedule", "true"));
+        this.poolRequests = Boolean.parseBoolean(java.lang.System.getProperty("hazelcast.alto.pool-requests", "true"));
+        boolean poolLocalResponses = Boolean.parseBoolean(System.getProperty("hazelcast.alto.pool-local-responses", "true"));
+        this.poolRemoteResponses = Boolean.parseBoolean(java.lang.System.getProperty("hazelcast.alto.pool-remote-responses", "false"));
+        this.concurrentRequestLimit = Integer.parseInt(java.lang.System.getProperty("hazelcast.alto.concurrent-request-limit", "-1"));
+        this.requestTimeoutMs = Integer.parseInt(java.lang.System.getProperty("hazelcast.alto.request.timeoutMs", "23000"));
+        this.socketCount = Integer.parseInt(java.lang.System.getProperty("hazelcast.alto.channels", "" + Runtime.getRuntime().availableProcessors()));
 
         this.partitionActorRefs = new PartitionActorRef[271];
 

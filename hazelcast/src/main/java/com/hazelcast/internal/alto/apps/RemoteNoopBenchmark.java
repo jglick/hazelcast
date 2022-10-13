@@ -11,8 +11,8 @@ import com.hazelcast.table.Table;
 public class RemoteNoopBenchmark {
 
     public static void main(String[] args) throws Exception {
-        System.setProperty("reactor.count", "1");
-        System.setProperty("reactor.channels", "1");
+        System.setProperty("hazelcast.tpc.eventloop.count", "1");
+        System.setProperty("hazelcast.tpc.channel.count", "1");
         HazelcastInstance node1 = Hazelcast.newHazelcastInstance();
         HazelcastInstance node2 = Hazelcast.newHazelcastInstance();
 
