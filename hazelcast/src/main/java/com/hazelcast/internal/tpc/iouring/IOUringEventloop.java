@@ -243,7 +243,7 @@ public class IOUringEventloop extends Eventloop {
         private int ioseqAsyncThreshold = DEFAULT_IOSEQ_ASYNC_THRESHOLD;
         private IORequestScheduler ioRequestScheduler = new IORequestScheduler(512);
 
-        protected IOUringConfiguration() {
+        public IOUringConfiguration() {
             super(Type.IOURING);
         }
 
