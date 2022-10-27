@@ -45,7 +45,6 @@ public final class EpollAsyncSocket extends AsyncSocket {
         return new EpollAsyncSocket();
     }
 
-    private final boolean clientSide;
     // immutable state
     private LinuxSocket socket;
     private EpollEventloop eventloop;

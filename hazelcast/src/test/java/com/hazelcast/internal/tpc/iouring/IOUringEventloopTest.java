@@ -1,10 +1,9 @@
-package com.hazelcast.alto.engine.iouring;
+package com.hazelcast.internal.tpc.iouring;
 
-import com.hazelcast.internal.tpc.iouring.IOUringEventloop;
+import com.hazelcast.internal.tpc.EventloopTest;
 import com.hazelcast.test.HazelcastParallelClassRunner;
 import com.hazelcast.test.annotation.QuickTest;
 import com.hazelcast.internal.tpc.Eventloop;
-import com.hazelcast.alto.engine.EventloopTest;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
@@ -15,5 +14,10 @@ public class IOUringEventloopTest extends EventloopTest {
     @Override
     public Eventloop createEventloop() {
         return new IOUringEventloop();
+    }
+
+    @Override
+    public Eventloop.Type getType() {
+        return Eventloop.Type.IOURING;
     }
 }

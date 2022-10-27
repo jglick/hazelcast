@@ -18,9 +18,9 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
 
+import static com.hazelcast.internal.tpc.util.Util.toPageAlignedAddress;
 import static com.hazelcast.test.HazelcastTestSupport.assertOpenEventually;
 import static com.hazelcast.internal.tpc.AsyncFile.pageSize;
-import static com.hazelcast.internal.alto.util.Util.toPageAlignedAddress;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;

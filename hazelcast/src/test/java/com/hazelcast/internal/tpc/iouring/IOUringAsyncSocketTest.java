@@ -1,11 +1,9 @@
-package com.hazelcast.alto.engine.iouring;
+package com.hazelcast.internal.tpc.iouring;
 
-import com.hazelcast.internal.tpc.iouring.IOUringAsyncSocket;
-import com.hazelcast.internal.tpc.iouring.IOUringEventloop;
+import com.hazelcast.internal.tpc.AsyncSocketTest;
 import com.hazelcast.test.HazelcastSerialClassRunner;
 import com.hazelcast.test.annotation.QuickTest;
 import com.hazelcast.internal.tpc.AsyncSocket;
-import com.hazelcast.alto.engine.AsyncSocketTest;
 import com.hazelcast.internal.tpc.Eventloop;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;

@@ -48,7 +48,6 @@ public final class IOUringAsyncSocket extends AsyncSocket {
         IOUring.ensureAvailability();
     }
 
-    private final boolean clientSide;
     private Thread eventloopThread;
 
     public static IOUringAsyncSocket open() {
