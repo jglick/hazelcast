@@ -127,7 +127,9 @@ public class AltoRuntime {
         this.socketCount = Integer.parseInt(java.lang.System.getProperty("hazelcast.alto.channels", "" + Runtime.getRuntime().availableProcessors()));
 
         this.partitionActorRefs = new PartitionActorRef[271];
-
+        this.managers = new Managers();
+        //hack
+        managers.tableManager = new TableManager(partitionActorRefs.length);
         this.requestRegistry = new RequestRegistry(concurrentRequestLimit, partitionActorRefs.length);
         this.responseHandler = new ResponseHandler(responseThreadCount,
                 responseThreadSpin,
@@ -136,9 +138,7 @@ public class AltoRuntime {
         this.tpcEngine = newEngine();
 
         this.socketConfig = new SocketConfig();
-        this.managers = new Managers();
-        //hack
-        managers.tableManager = new TableManager(partitionActorRefs.length);
+
     }
 
     public TpcEngine getTpcEngine() {

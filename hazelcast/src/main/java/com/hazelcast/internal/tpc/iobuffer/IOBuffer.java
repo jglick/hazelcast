@@ -225,27 +225,36 @@ public class IOBuffer {
 
     // very inefficient
     public void writeString(String s) {
-        int length = s.length();
+        if (s == null) {
+            buff.putInt(-1);
+        } else {
+            int length = s.length();
 
-        ensureRemaining(BYTES_INT + length * BYTES_CHAR);
+            ensureRemaining(BYTES_INT + length * BYTES_CHAR);
 
-        buff.putInt(length);
-        for (int k = 0; k < length; k++) {
-            buff.putChar(s.charAt(k));
+            buff.putInt(length);
+            for (int k = 0; k < length; k++) {
+                buff.putChar(s.charAt(k));
+            }
         }
     }
 
     // very inefficient
     public void readString(StringBuffer sb) {
         int size = buff.getInt();
+
         for (int k = 0; k < size; k++) {
             sb.append(buff.getChar());
         }
     }
 
+    // very inefficient
     public String readString() {
         StringBuffer sb = new StringBuffer();
         int size = buff.getInt();
+        if (size == -1) {
+            return null;
+        }
         for (int k = 0; k < size; k++) {
             sb.append(buff.getChar());
         }
