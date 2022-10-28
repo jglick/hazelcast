@@ -25,6 +25,7 @@ import java.util.function.BiConsumer;
 public class LoopMain {
 
     public static void main(String[] args) {
+        System.setProperty("alto.enabled","true");
         Eventloop eventloop = new NioEventloop();
         eventloop.start();
 
