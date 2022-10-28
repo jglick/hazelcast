@@ -62,12 +62,12 @@ public final class EpollAsyncServerSocket extends AsyncServerSocket {
     }
 
     @Override
-    public int getLocalPort() {
+    public int localPort() {
         return 0;
     }
 
     @Override
-    protected SocketAddress getLocalAddress0() throws Exception {
+    protected SocketAddress localAddress0() throws Exception {
         return serverSocket.localAddress();
     }
 
@@ -154,7 +154,7 @@ public final class EpollAsyncServerSocket extends AsyncServerSocket {
     }
 
     @Override
-    protected void doClose() throws IOException {
+    protected void close0() throws IOException {
         eventloop.deregisterResource(this);
         serverSocket.close();
     }

@@ -79,7 +79,7 @@ public final class IOUringAsyncServerSocket extends AsyncServerSocket {
     }
 
     @Override
-    public int getLocalPort() {
+    public int localPort() {
         return serverSocket.localAddress().getPort();
     }
 
@@ -89,7 +89,7 @@ public final class IOUringAsyncServerSocket extends AsyncServerSocket {
     }
 
     @Override
-    protected SocketAddress getLocalAddress0() {
+    protected SocketAddress localAddress0() {
         return serverSocket.localAddress();
     }
 
@@ -148,7 +148,7 @@ public final class IOUringAsyncServerSocket extends AsyncServerSocket {
     }
 
     @Override
-    protected void doClose() throws IOException {
+    protected void close0() throws IOException {
         eventloop.deregisterResource(this);
         serverSocket.close();
     }
