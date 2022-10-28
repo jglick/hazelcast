@@ -23,6 +23,7 @@ import com.hazelcast.table.Table;
 public class LocalNoopBenchmark {
 
     public static void main(String[] args) throws Exception {
+        System.setProperty("alto.enabled","true");
         HazelcastInstance node1 = Hazelcast.newHazelcastInstance();
 
         Table table = node1.getTable("sometable");

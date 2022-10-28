@@ -140,6 +140,10 @@ public final class TpcEngine {
                 break;
             }
         }
+
+        for (Eventloop eventloop : eventloops) {
+            eventloop.start();
+        }
     }
 
     /**
